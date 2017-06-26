@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.g_open.net_worm.db.mapper.DbIpInfo">
+
+	<select id="selectLocationByEndIp" parameterType="cn.g_open.net_worm.db.model.IpInfo" resultType="java.lang.String">
+		select location
+		  from net_worm_ip_info
+		 where endIp1 = #{endIp1}
+		   and endIp2 = #{endIp2}
+		   and endIp3 = #{endIp3}
+		   and endIp4 = #{endIp4}
+	</select>
+	
+	<insert id="insertIpInfo" parameterType="cn.g_open.net_worm.db.model.IpInfo">
+		insert into net_worm_ip_info
+		(startIp1, startIp2, startIp3, startIp4, endIp1, endIp2, endIp3, endIp4, location, createBy, modifyBy)
+		values
+		(#{startIp1}, #{startIp2}, #{startIp3}, #{startIp4}, #{endIp1}, #{endIp2}, #{endIp3}, #{endIp4}, #{location}, #{createBy}, #{modifyBy})
+	</insert>
+
+	<update id="updateEndIpByStartIp" parameterType="cn.g_open.net_worm.db.model.IpInfo">
+		update net_worm_ip_info set
+			endIp1 = #{endIp1},
+			endIp2 = #{endIp2},
+			endIp3 = #{endIp3},
+			endIp4 = #{endIp4},
+			modifyBy = #{modifyBy},
+			modifyDate = now()
+		where endIp1 = #{startIp1}
+		  and endIp2 = #{startIp2}
+		  and endIp3 = #{startIp3}
+		  and endIp4 = #{startIp4}
+	</update>
+</mapper>
