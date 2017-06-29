@@ -14,7 +14,7 @@
 			targetProject="net_worm/database" />
 		<javaClientGenerator targetPackage="cn.g_open.net_worm.db.mapper"
 			targetProject="net_worm/database" type="XMLMAPPER" />
-		<table schema="net_worm" tableName="net_worm_ip_info" domainObjectName="IpInfo">
+		<table schema="net_worm" tableName="Ip_Info" domainObjectName="IpInfo">
 			<property name="useActualColumnNames" value="true" />
 			<generatedKey column="id" sqlStatement="MySql" identity="true" />
 			<columnOverride column="createDate" jdbcType="TIMESTAMP"/>

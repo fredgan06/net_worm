@@ -16,6 +16,7 @@ import com.alibaba.fastjson.JSONObject;
 import cn.g_open.net_worm.biz.BizIpInfo;
 import cn.g_open.net_worm.db.model.IpInfo;
 import cn.g_open.net_worm.utils.ApplicationProUtil;
+import cn.g_open.net_worm.utils.IpUtils;
 
 @RestController
 @RequestMapping("/ip")
@@ -40,16 +41,13 @@ public class IpInfoConroller
             return "输入参数有误，请重新输入！";
         }
 
+        Long startIpLong = IpUtils.ipToLong(startIp);
+        Long endIpLong = IpUtils.ipToLong(endIp);
 
-        for (int i = Integer.parseInt(startIps[3]); i < Integer.parseInt(endIps[3]); i++)
+        for (Long i = startIpLong; i < endIpLong; i++)
         {
-            String ip = startIps[0] + "." + startIps[1] + "." + startIps[2] + "." + i;
-            String url = "https://sp0.baidu.com/8aQDcjqpAAV3otqbppnN2DJv/api.php?query=" + ip + "&resource_id=6006";
-            // 获取url返回的json数据
-            String body = Jsoup.connect(url).ignoreContentType(true).execute().body();
-            // 解析json数据获取location值
-            String location = JSONObject.parseObject(body).getJSONArray("data").getJSONObject(0).getString("location");
-            System.out.println(location);
+            String ip = IpUtils.longToIP(startIpLong);
+            System.out.println(IpUtils.findByIp(ip));
         }
         return "OK";
     }
@@ -58,6 +56,13 @@ public class IpInfoConroller
     public IpInfo saveIpInfo(Long id) throws IOException
     {
         return bizIpInfo.selectById(id);
+    }
+
+    @RequestMapping("saveIp")
+    public String saveIp(String startIp, String endIp) throws IOException
+    {
+        bizIpInfo.saveIp(startIp, endIp);
+        return "OK";
     }
 
 }
