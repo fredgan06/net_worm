@@ -1,7 +1,6 @@
 package cn.g_open.net_worm.utils;
 
-import java.io.IOException;
-
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 
 import com.alibaba.fastjson.JSONArray;
@@ -9,12 +8,14 @@ import com.alibaba.fastjson.JSONObject;
 
 public class IpUtils
 {
-    public static String findByIp(String ip) throws IOException
+    public static String findByIp(String ip)
     {
+        
+        if(!checkIpFormat(ip)){
+            return "IP地址格式有误！";
+        }
         // 请求baidu接口获取IP详细信息
-        String body = Jsoup
-                .connect("https://sp0.baidu.com/8aQDcjqpAAV3otqbppnN2DJv/api.php?query=" + ip + "&resource_id=6006")
-                .ignoreContentType(true).execute().body();
+        String body = findJsonBodyByURL("https://sp0.baidu.com/8aQDcjqpAAV3otqbppnN2DJv/api.php?query=" + ip + "&resource_id=6006");
         // 解析获取的参数
         JSONObject json = JSONObject.parseObject(body);
         JSONArray jsonArray = json.getJSONArray("data");
@@ -24,6 +25,20 @@ public class IpUtils
         return location;
     }
     
+    private static String findJsonBodyByURL(String url){
+        while (true)
+        {
+            try
+            {
+                return Jsoup.connect(url).ignoreContentType(true).execute().body();
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
     // 将127.0.0.1形式的IP地址转换成十进制整数，这里没有进行任何错误处理
     public static long ipToLong(String strIp)
     {
@@ -57,9 +72,51 @@ public class IpUtils
         sb.append(String.valueOf((longIp & 0x000000FF)));
         return sb.toString();
     }
-    
+
+    public static boolean checkIpFormat(String ip)
+    {
+        String regex = "(([1-9]{1}[0-9]{0,1})||([1]{1}[0-9]{2})||([2]{1}(([0-4]{1}[0-9]{1})||([5]{1}[0-5]{1}))))"
+                + "\\."
+                + "(([0]{1})||([1-9]{1}[0-9]{0,1})||([1]{1}[0-9]{2})||([2]{1}(([0-4]{1}[0-9]{1})||([5]{1}[0-5]{1}))))"
+                + "\\."
+                + "(([0]{1})||([1-9]{1}[0-9]{0,1})||([1]{1}[0-9]{2})||([2]{1}(([0-4]{1}[0-9]{1})||([5]{1}[0-5]{1}))))"
+                + "\\."
+                + "(([0]{1})||([1-9]{1}[0-9]{0,1})||([1]{1}[0-9]{2})||([2]{1}(([0-4]{1}[0-9]{1})||([5]{1}[0-5]{1}))))";
+        if (StringUtils.isEmpty(ip) || !ip.matches(regex))
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
     public static void main(String[] args)
     {
-        System.out.println(longToIP(16842752L));
+        System.out.println(aaa("123131231"));
     }
+    
+    private static String aaa(String url){
+        int i = 0;
+        while (true)
+        {
+            try
+            {
+                String body = null;
+                if(i == 100){
+                    body = url;
+                }else{
+                    throw new Exception();
+                }
+                return body;
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            i++;
+        }
+    }
+    
 }

@@ -1,4 +1,4 @@
-package cn.g_open.net_worm.servlet;
+package cn.g_open.net_worm.filter;
 
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.annotation.WebInitParam;

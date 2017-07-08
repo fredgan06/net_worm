@@ -10,5 +10,5 @@ public interface DbIpInfo
     
     public void updateEndLongByLocation(IpInfo ipInfo);
     
-    
+    public void selectLocationByStartLongAndEndLong(IpInfo ipInfo);
 }

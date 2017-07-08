@@ -12,6 +12,15 @@
 		 ]]>
 	</select>
 	
+	<select id="selectLocationByStartLongAndEndLong" parameterType="cn.g_open.net_worm.db.model.IpInfo" resultType="java.lang.String">
+		select location
+		  from ip_info
+		<![CDATA[
+		 where startLong <= #{endLong}
+		   and endLong >= #{endLong} - 1
+		 ]]>
+	</select>
+	
 	<insert id="insertIpInfo" parameterType="cn.g_open.net_worm.db.model.IpInfo">
 		insert into ip_info
 		(startLong, endLong, location, createBy, modifyBy)

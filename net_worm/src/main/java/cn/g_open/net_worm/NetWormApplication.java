@@ -14,6 +14,7 @@ public class NetWormApplication
     public static void main(String[] args)
     {
         SpringApplication.run(NetWormApplication.class, args);
+        
     }
 
 }

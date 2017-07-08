@@ -1,6 +1,6 @@
 package cn.g_open.net_worm.biz.impl;
 
-import java.io.IOException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,6 +9,8 @@ import cn.g_open.net_worm.biz.BizIpInfo;
 import cn.g_open.net_worm.db.mapper.DbIpInfo;
 import cn.g_open.net_worm.db.mapper.IpInfoMapper;
 import cn.g_open.net_worm.db.model.IpInfo;
+import cn.g_open.net_worm.db.model.IpInfoExample;
+import cn.g_open.net_worm.db.model.IpInfoExample.Criteria;
 import cn.g_open.net_worm.utils.IpUtils;
 
 @Service
@@ -32,7 +34,7 @@ public class BizIpInfoImpl implements BizIpInfo
     }
 
     @Override
-    public void saveIp(String startIp, String endIp) throws IOException
+    public void saveIp(String startIp, String endIp)
     {
         Long startLong = IpUtils.ipToLong(startIp);
         Long endLong = IpUtils.ipToLong(endIp);
@@ -52,8 +54,24 @@ public class BizIpInfoImpl implements BizIpInfo
             }else {
                 dbIpInfo.insertIpInfo(ipInfo);
             }
-            System.out.println("ip=" + ip + "; location=" + location);
+            System.out.println(Thread.currentThread().getName() + "ip=" + ip + "; location=" + location);
         }
+    }
+
+    @Override
+    public String findLocationByIp(String ip)
+    {
+        String location = "未查到" + ip + "的具体地址！"; 
+        Long ipLong = IpUtils.ipToLong(ip);
+        IpInfoExample example = new IpInfoExample();
+        Criteria criteria = example.createCriteria();
+        criteria.andStartLongLessThanOrEqualTo(ipLong);
+        criteria.andEndLongGreaterThanOrEqualTo(ipLong);
+        List<IpInfo> ipInfoList = ipInfoMapper.selectByExample(example);
+        if(null != ipInfoList && !ipInfoList.isEmpty()){
+            location = ipInfoList.get(0).getLocation();
+        }
+        return location;
     }
 
 }
