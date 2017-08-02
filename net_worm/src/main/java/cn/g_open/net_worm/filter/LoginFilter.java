@@ -16,8 +16,8 @@ import javax.servlet.http.HttpSession;
 
 import cn.g_open.net_worm.domainModel.loginUser;
 
-@WebFilter(filterName = "LoginFilter", urlPatterns = "/*", initParams = {
-        @WebInitParam(name = "exclusions", value = "*.js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico,/login.html,/druid/*") })
+@WebFilter(filterName = "LoginFilter", urlPatterns = "/a/*", initParams = {
+        @WebInitParam(name = "exclusions", value = "*.js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico,/ip/*,/login.html,/druid/*") })
 public class LoginFilter implements Filter
 {
     private String exclusions;

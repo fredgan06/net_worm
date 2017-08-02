@@ -94,7 +94,7 @@ public class IpUtils
 
     public static void main(String[] args)
     {
-        System.out.println(aaa("123131231"));
+        System.out.println(longToIP(50491823));
     }
     
     private static String aaa(String url){

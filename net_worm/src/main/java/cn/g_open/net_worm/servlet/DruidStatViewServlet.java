@@ -6,7 +6,7 @@ import javax.servlet.annotation.WebServlet;
 import com.alibaba.druid.support.http.StatViewServlet;
 
 @WebServlet(urlPatterns = "/druid/*", initParams = {   
-        @WebInitParam(name = "allow", value = "127.0.0.1"), // IP白名单// (没有配置或者为空，则允许所有访问)  
+        @WebInitParam(name = "allow", value = ""), // IP白名单// (没有配置或者为空，则允许所有访问)  
         @WebInitParam(name = "deny", value = ""), // IP黑名单// (存在共同时，deny优先于allow)  
         @WebInitParam(name = "loginUsername", value = "gjh"), // 用户名  
         @WebInitParam(name = "loginPassword", value = "1111"), // 密码 

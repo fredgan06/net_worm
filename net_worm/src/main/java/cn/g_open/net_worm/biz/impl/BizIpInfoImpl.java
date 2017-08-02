@@ -54,7 +54,7 @@ public class BizIpInfoImpl implements BizIpInfo
             }else {
                 dbIpInfo.insertIpInfo(ipInfo);
             }
-            System.out.println(Thread.currentThread().getName() + "ip=" + ip + "; location=" + location);
+//            System.out.println(Thread.currentThread().getName() + "ip=" + ip + "; location=" + location);
         }
     }
 

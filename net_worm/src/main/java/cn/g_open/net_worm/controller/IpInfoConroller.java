@@ -15,6 +15,7 @@ import cn.g_open.net_worm.db.model.IpInfo;
 import cn.g_open.net_worm.utils.ApplicationProUtil;
 import cn.g_open.net_worm.utils.IpUtils;
 import cn.g_open.net_worm.utils.TestApplicationUtil;
+import junit.framework.Test;
 
 @RestController
 @RequestMapping("/ip")
@@ -22,12 +23,22 @@ public class IpInfoConroller
 {
     @Autowired
     private ApplicationProUtil appPorUtil;
-    
+
     @Autowired
     private TestApplicationUtil testPorUtil;
-    
+
     @Autowired
     private BizIpInfo bizIpInfo;
+
+    @RequestMapping("test")
+    public String Test(String msg)
+    {
+        if (StringUtils.isEmpty(msg))
+        {
+            return "测试页面";
+        }
+        return msg;
+    }
 
     @RequestMapping("/start")
     public String demo(String startIp, String endIp) throws IOException
@@ -60,6 +71,12 @@ public class IpInfoConroller
         return bizIpInfo.selectById(id);
     }
 
+    @RequestMapping("/selectByIp")
+    public String selectByIp(String ip) throws IOException
+    {
+        return bizIpInfo.findLocationByIp(ip);
+    }
+
     @RequestMapping("/saveIp")
     public String saveIp(String startIp, String endIp) throws IOException
     {
@@ -77,21 +94,34 @@ public class IpInfoConroller
         }
         return location;
     }
-    
+
     @RequestMapping("/getPor")
     public String findLocationByIp()
     {
         return testPorUtil.getUserName() + " ; " + testPorUtil.getPassword();
     }
 
+    @RequestMapping("/startIp")
+    public String startIp(Integer poolNum, String stratIp, String endIp)
+    {
+        ExecutorService pool = Executors.newCachedThreadPool();
+        for (int i = 0; i <= poolNum; i++)
+        {
+            pool.submit(new FindIpPoolModel(i + ".0.0.0", i + ".255.255.255", bizIpInfo));
+        }
+        pool.shutdown();
+        
+        return "OK";
+    }
+
     @RequestMapping("/startPool")
-    public String startPool()
+    public String startPool(String startIp, String endIp)
     {
         ExecutorService pool = Executors.newFixedThreadPool(300);
 
-        for (int i = 0; i < 255; i++)
+        for (int i = 0; i < 100; i++)
         {
-            pool.submit(new FindIpPoolModel("2." + i + ".0.0", "2." + i + ".255.255", bizIpInfo));
+            pool.submit(new FindIpPoolModel("3." + i + ".0.0", "2." + i + ".255.255", bizIpInfo));
         }
         pool.shutdown();
 
@@ -114,5 +144,17 @@ public class IpInfoConroller
         return "OK";
     }
     
+    @RequestMapping("getIpByLong")
+    public String getIpByLong(Long num){
+        if(null == null){
+            return IpUtils.longToIP(352321718);
+        }
+        return IpUtils.longToIP(num);
+    }
+    
+    public static void main(String[] args)
+    {
+        System.out.println(IpUtils.longToIP(352321718));
+    }
 
 }
